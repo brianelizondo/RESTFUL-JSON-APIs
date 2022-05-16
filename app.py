@@ -58,3 +58,32 @@ def create_cupcake():
     db.session.commit()
     response_json = jsonify(cupcake=new_cupcake.serialize())
     return (response_json, 201)
+
+
+@app.route("/api/cupcakes/<int:cupcake_id>", methods=["PATCH"])
+def update_cupcake(cupcake_id):
+    """
+    Update a cupcake with the id passed in the URL and flavor, size, rating and image data from the body of the request. 
+    You can always assume that the entire cupcake object will be passed to the backend.
+    This should raise a 404 if the cupcake cannot be found.
+    Respond with JSON of the newly-updated cupcake, like this: {cupcake: {id, flavor, size, rating, image}}
+    """
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    cupcake.flavor = request.json.get('flavor', cupcake.flavor)
+    cupcake.size = request.json.get('size', cupcake.size)
+    cupcake.rating = request.json.get('rating', cupcake.rating)
+    cupcake.image = request.json.get('image', cupcake.image)
+    db.session.commit()
+    return jsonify(cupcake=cupcake.serialize())
+
+
+@app.route("/api/cupcakes/<int:cupcake_id>", methods=["DELETE"])
+def delete_cupcake(cupcake_id):
+    """
+    This should raise a 404 if the cupcake cannot be found.
+    Delete cupcake with the id passed in the URL. Respond with JSON like {message: "Deleted"}.
+    """
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    db.session.delete(cupcake)
+    db.session.commit()
+    return jsonify(message="Deleted")
