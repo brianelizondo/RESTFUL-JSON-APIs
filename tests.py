@@ -143,3 +143,15 @@ class CupcakeViewsTestCase(TestCase):
             self.assertEqual(data, {
                 "message": "Deleted"
             })
+
+    def test_404_respond(self):
+        with app.test_client() as client:
+            url = f"/api/cupcakes/100"
+            resp_get = client.get(url)
+            resp_patch = client.patch(url)
+            resp_delete = client.delete(url)
+
+            self.assertEqual(resp_get.status_code, 404)
+            self.assertEqual(resp_patch.status_code, 404)
+            self.assertEqual(resp_delete.status_code, 404)
+            
