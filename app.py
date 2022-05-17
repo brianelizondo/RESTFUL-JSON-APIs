@@ -36,7 +36,20 @@ def get_list_cupcakes():
     The values should come from each cupcake instance.
     """
 
-    all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
+    all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.order_by('flavor').all()]
+    return jsonify(cupcakes=all_cupcakes)
+
+
+@app.route("/api/cupcakes/search")
+def search_cupcakes():
+    """
+    Get data about all cupcakes filtered by flavor seach.
+    Respond with JSON like: {cupcakes: [{id, flavor, size, rating, image}, ...]}.
+    The values should come from each cupcake instance.
+    """
+    flavor_term = request.args["flavor"]
+    cupcakes_obj = Cupcake.query.filter(Cupcake.flavor.ilike(f'%{flavor_term}%')).order_by('flavor').all()
+    all_cupcakes = [cupcake.serialize() for cupcake in cupcakes_obj]
     return jsonify(cupcakes=all_cupcakes)
 
 

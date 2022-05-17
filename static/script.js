@@ -39,5 +39,25 @@ $('#add_cupcake button').click(function(evt){
     addCupcake();
 });
 
+// Functionality for searching for cupcakes
+async function searchCupcake(){
+    try{
+        const flavor = $('#search_flavor').val();
+        const response = await axios.get(`${ URL_LOCALHOST }/api/cupcakes/search`, { params: { flavor } });
+        const cupcakes_list = response.data.cupcakes;
+        
+        $('#cupcakes_list').empty();
+        for(let cupcake of cupcakes_list){
+            updateCupcakesList(cupcake.flavor);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+$('#search_cupcake button').click(function(evt){
+    evt.preventDefault();
+    searchCupcake();
+});
+
 // Load and show all cupcakes
 getCupcakes();
