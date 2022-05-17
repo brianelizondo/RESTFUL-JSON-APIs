@@ -20,6 +20,14 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+@app.route("/")
+def homepage():
+    """
+    List of cupcakes
+    """
+    return render_template("home.html")
+
+
 @app.route("/api/cupcakes")
 def get_list_cupcakes():
     """
