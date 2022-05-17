@@ -26,30 +26,20 @@
     <div class="row mt-5">
         <h4 class="display-6">Add Cupcake</h4>
         <form id="add_cupcake" method="post">
+            {{ form_add.hidden_tag() }}
+          
+            {% for field_add in form_add if field_add.widget.input_type != 'hidden' %}
             <div class="mb-3 row">
-                <label for="flavor" class="col-sm-2 col-form-label">Flavor:</label>
+                {{ field_add.label(class_="col-sm-2 col-form-label") }}
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="flavor" placeholder="Enter the cupcake Flavor">
+                    {{ field_add(class_="form-control") }}
                 </div>
+                
+                {% for error in field_add.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
-            <div class="mb-3 row">
-                <label for="size" class="col-sm-2 col-form-label">Size:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="size" placeholder="Enter the cupcake Size">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="rating" class="col-sm-2 col-form-label">Rating:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="rating" placeholder="Enter the cupcake Rating">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="image" class="col-sm-2 col-form-label">Image URL:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="image" placeholder="Enter the cupcake Image URL">    
-                </div>
-            </div>
+            {% endfor %}
             <button type="submit" class="btn btn-primary">Add Cupcake</button>
         </form>
     </div>

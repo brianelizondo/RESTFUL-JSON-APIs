@@ -1,7 +1,7 @@
 """Flask app for Cupcakes"""
-from flask import Flask, request, jsonify, render_template
-
+from flask import Flask, request, jsonify, render_template, flash
 from models import db, connect_db, Cupcake
+from forms import AddCupcakeForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "abcd1234"
@@ -25,7 +25,8 @@ def homepage():
     """
     List of cupcakes
     """
-    return render_template("home.html")
+    form_add = AddCupcakeForm()
+    return render_template("home.html", form_add=form_add)
 
 
 @app.route("/api/cupcakes")
@@ -35,7 +36,6 @@ def get_list_cupcakes():
     Respond with JSON like: {cupcakes: [{id, flavor, size, rating, image}, ...]}.
     The values should come from each cupcake instance.
     """
-
     all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.order_by('flavor').all()]
     return jsonify(cupcakes=all_cupcakes)
 
